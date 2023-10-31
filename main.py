@@ -12,29 +12,27 @@ DEFAULT_HIGH = 10
 
 def main():
     """Menu-driven guessing game with option to change high limit."""
-    low = DEFAULT_LOW
-    high = DEFAULT_HIGH
     number_of_games = 0
     print("Welcome to the guessing game")
     choice = input("(P)lay, (S)et limit, (H)igh scores, (Q)uit: ").upper()
     while choice != "Q":
         if choice == "P":
-            play(low, high)
+            play(DEFAULT_LOW, DEFAULT_HIGH)
             number_of_games += 1
         elif choice == "S":
-            high = set_limit(low)
+            set_limit(DEFAULT_LOW)
         elif choice == "H":
             high_scores()
         else:
             print("Invalid choice")
         choice = input("(P)lay, (S)et limit, (H)igh scores, (Q)uit: ").upper()
-    save_score(number_of_games, low, high)
+    save_score(number_of_games, DEFAULT_LOW, DEFAULT_HIGH)
     print(f"Thanks for playing ({number_of_games} times)!")
 
 
 def save_score(number_of_guesses, low, high):
     """Save score to scores.txt with range"""
-    with open("scores.txt", "a") as outfile:
+    with open("scores.txt", "a", encoding="utf-8") as outfile:
         print(f"{number_of_guesses}|{high - low + 1}", file=outfile)
 
 
@@ -51,7 +49,7 @@ def play(low, high):
             print("Lower")
         guess = int(input(f"Guess a number between {low} and {high}: "))
     print(f"You got it in {number_of_guesses} guesses.")
-    if good_score(number_of_guesses, high - low + 1):
+    if is_good_score(number_of_guesses, high - low + 1):
         print("Good guessing!")
     else:
         pass
@@ -59,8 +57,7 @@ def play(low, high):
     if choice.upper() == "Y":
         save_score(number_of_guesses, low, high)
         return
-    else:
-        print("Fine then.")
+    print("Fine then.")
 
 
 def set_limit(low):
@@ -85,10 +82,9 @@ def get_valid_number(prompt):
     return number  # Ignore Pycharm warning
 
 
-def good_score(number_of_guesses, range_):
+def is_good_score(number_of_guesses, range_):
     """Determine if the number of guesses if a good score."""
-    if number_of_guesses <= math.ceil(math.log2(range_)):
-        return True
+    return number_of_guesses <= math.ceil(math.log2(range_))
 
 
 def high_scores():
@@ -100,7 +96,7 @@ def high_scores():
             scores.append((int(line[0]), int(line[1])))
     scores.sort()
     for score in scores:
-        marker = "!" if good_score(score[0], score[1]) else ""
+        marker = "!" if is_good_score(score[0], score[1]) else ""
         print(f"{score[0]} ({score[1]}) {marker}")
 
 
