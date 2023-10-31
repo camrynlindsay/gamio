@@ -90,7 +90,7 @@ def is_good_score(number_of_guesses, range_):
 def high_scores():
     """Display high scores."""
     scores = []
-    with open("scores.txt") as in_file:
+    with open("scores.txt", "r", encoding="utf-8") as in_file:
         for line in in_file:
             line = line.split("|")
             scores.append((int(line[0]), int(line[1])))
