@@ -80,7 +80,7 @@ def get_valid_number(prompt):
             is_valid = True
         except ValueError:
             print("Invalid number")
-    return number
+    return number  # Ignore Pycharm warning
 
 
 def good_score(number_of_guesses, range_):
